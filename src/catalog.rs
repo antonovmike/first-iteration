@@ -11,8 +11,8 @@ pub struct CoffeeHouse {
     pub address: String,
 }
 
-pub fn kofe_list() -> [CoffeeHouse; 30] {
-    let kmk: [CoffeeHouse; 30] = [CoffeeHouse {
+pub fn kofe_list() -> [CoffeeHouse; 40] {
+    let kmk: [CoffeeHouse; 40] = [CoffeeHouse {
 			//format!("Stamba cafe").bold()
             description: String::from("
 Stamba cafe

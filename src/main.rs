@@ -77,7 +77,7 @@ async fn main() {
 fn distance(
     lat_user: f64,
     lon_user: f64,
-    mut list_of_coffe_houses: [CoffeeHouse; 30],
+    mut list_of_coffe_houses: [CoffeeHouse; 40],
 ) -> Vec<CoffeeHouse> {
     let point_user = point!(x: lat_user, y: lon_user);
     list_of_coffe_houses.sort_by(|a, b| {
