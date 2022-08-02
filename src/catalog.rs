@@ -11,8 +11,8 @@ pub struct CoffeeHouse {
     pub address: String,
 }
 
-pub fn kofe_list() -> [CoffeeHouse; 40] {
-    let kmk: [CoffeeHouse; 40] = [CoffeeHouse {
+pub fn kofe_list() -> [CoffeeHouse; 39] {
+    let kmk: [CoffeeHouse; 39] = [CoffeeHouse {
 			//format!("Stamba cafe").bold()
             description: String::from("
 Stamba cafe
@@ -165,23 +165,6 @@ Lolita
             location_y: 44.786925,
             caffee_name: String::from("Lolita"),
             address: String::from("7 Tamar Chovelidze St"),
-        },
-        CoffeeHouse {
-            description: String::from("
-Maria Magdalena
-
-Стильное место спрятанном в зеленом дворике. Европейская еда, боулы и все такое. В лавке при ресторане можно купить растение. Как найти? Поднимитесь от м.Руставели по улице Зандукели, оттуда первый поворот направо. Пройдите сквозь кирпичную арку и двигайтесь вниз по тропинке мимо «Кето и Коте», пока не обнаружите зелёную дверь.
-
-Открыты 11:00-23:00
-❌ альтернативный кофе: нет
-❌не рекомендуем брать ноутбук, место не с рабочей атмосферой
-Инстаграм: https://www.instagram.com/mariamagdalina.tbilisi"),
-            photo: String::from("src/resources/maria_magdalena.jpg"),
-            google_maps: String::from("https://goo.gl/maps/DdRrKJpU12Q3yB7R9"),
-            location_x: 41.704922,
-            location_y: 44.788100,
-            caffee_name: String::from("Maria Magdalena"),
-            address: String::from("5 Mikheil Zandukeli Dead End"),
         },
         CoffeeHouse {
             description: String::from("
