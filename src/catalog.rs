@@ -11,8 +11,8 @@ pub struct CoffeeHouse {
     pub address: String,
 }
 
-pub fn kofe_list() -> [CoffeeHouse; 39] {
-    let kmk: [CoffeeHouse; 39] = [CoffeeHouse {
+pub fn kofe_list() -> [CoffeeHouse; 46] {
+    let kmk: [CoffeeHouse; 46] = [CoffeeHouse {
 			//format!("Stamba cafe").bold()
             description: String::from("
 Stamba cafe
@@ -687,6 +687,136 @@ https://www.instagram.com/puri.guliani/"),
             location_y: 44.763405,
             caffee_name: String::from("Puri Guliani EXPRESS"),
             address: String::from("37 Irakli Abashidze Street"),
+        },
+
+        CoffeeHouse {
+            description: String::from("
+Pouch
+
+Новая LGBTQA- и Pet-friendly кофейня. Говорят, здесь лучший чизкейк и травяной чай в Тбилиси. В кофейне часто проходят мероприятия, например, английские или книжные клабы. 
+
+Открыты 09:00-21:00
+✅альтернативный кофе: есть
+✅можно с ноутбуками
+
+Инстаграм: https://www.instagram.com/pouchofcoffee/"),
+            photo: String::from("src/resources/pouch.jpg"),
+            google_maps: String::from("https://goo.gl/maps/3e5qdSqbXbv8LHVbA"),
+            location_x: 41.711417,
+            location_y: 44.755327,
+            caffee_name: String::from("Pouch"),
+            address: String::from("9 Ilo Mosashvili St"),
+        },
+        CoffeeHouse {
+            description: String::from("
+Bagelin
+
+Пекарня с нью-йорскими бейглами в грузинском исполнении. Спрятана недалеко от Wine Factory во дворе между многоэтажными зданиями. Лучше зайдите в их Инстаграм и подсмотрите путь в закрепленных сторис. 
+
+Открыты 09:00-17:00 (во вторник закрыты)
+❌альтернативный кофе: нет, но кофе выпить можно, а лучше попробуйте сидр
+✅можно с ноутбуками
+
+Инстаграм: https://www.instagram.com/bagelin.ge/"),
+            photo: String::from("src/resources/bagelin.jpg"),
+            google_maps: String::from("https://g.page/bagelin-ge"),
+            location_x: 41.709923,
+            location_y: 44.781163,
+            caffee_name: String::from("Bagelin"),
+            address: String::from("5 Luarsab Sharashidze Street"),
+        },
+        CoffeeHouse {
+            description: String::from("
+Freedom Aroma Bar
+
+Пространство с кофе, булочками, вином, растениями и свечами. Периодически проводятся ивенты от открытого микрофона до рынков выходного дня. Если застали Цветаевский яблочный пирог — берите) 
+ 
+
+Открыты Пн-Чт 10:00-22:00
+Пт-Вс с 10:00 до последнего гостя
+✅альтернативный кофе: есть
+✅можно с ноутбуками, но места немного
+
+Инстаграм: https://www.instagram.com/freedom_aroma_bar/"),
+            photo: String::from("src/resources/freedom_aroma.jpg"),
+            google_maps: String::from("https://goo.gl/maps/ACUVD6dbZBN71Ukc7"),
+            location_x: 41.707554,
+            location_y: 44.769818,
+            caffee_name: String::from("Freedom Aroma Bar"),
+            address: String::from("3 Shalva Radiani St"),
+        },
+        CoffeeHouse {
+            description: String::from("
+Coffee Lab
+
+Вторая точка сети Coffee Lab (первая в Сабуртало). Такая же просторная и классная, Кофейня не закупает зерна, а обжаривает сама, еще здесь же можно купить кофейник, керамическую воронку и другие аксессуары.
+
+Открыты 09:00-23:00
+✅альтернативный кофе: есть
+✅можно с ноутбуками, места много
+
+Инстаграм: https://www.instagram.com/coffeelab_chavchavadze"),
+            photo: String::from("src/resources/coffee_lab_chavchadze.jpg"),
+            google_maps: String::from("https://goo.gl/maps/kL9MvtpxGQamWM1HA"),
+            location_x: 41.711784,
+            location_y: 44.756633,
+            caffee_name: String::from("Coffee Lab"),
+            address: String::from("37 Ilia Chavchavadze Avenue (AXIS Towers)"),
+        },
+        CoffeeHouse {
+            description: String::from("
+The Museum
+
+Красочное кафе при музее изобразительных искусств. Есть и сытная еда, и десерты, и кофе. Классно сидеть на открытом балконе, с которого открывается вид на церковь Св. Георгия Кашуэти и оживленный проспект Руставели. 
+
+Открыты 10:00-23:00
+❌альтернативный кофе: нет
+✅можно с ноутбуками
+
+Фейсбук: https://www.facebook.com/themuseum.ge/"),
+            photo: String::from("src/resources/the_museum.jpg"),
+            google_maps: String::from("https://goo.gl/maps/qxVhKCEPP4q7PEjd6"),
+            location_x: 41.697218,
+            location_y: 44.799507,
+            caffee_name: String::from("The Museum"),
+            address: String::from("Rustaveli ave., 7"),
+        },
+        CoffeeHouse {
+            description: String::from("
+Soda
+
+Небольшое, но очень симпатичное место с видом на парк Мтацминда и телебашню. Внушительная коктейльная карта, где в каждом напитке есть местный секретный ингридиент. В дополнение к коктейлями или утреннему кофе всегда найдется вкусная еда.
+
+Открыты 12:00-00:00
+✅альтернативный кофе: да
+❌не рекомендуем брать ноутбук, места мало
+
+Инстаграм: https://www.instagram.com/sodapshhh/"),
+            photo: String::from("src/resources/soda.jpg"),
+            google_maps: String::from("https://goo.gl/maps/BF3ThTdsbUNqTvJR8"),
+            location_x: 41.691167,
+            location_y: 44.802185,
+            caffee_name: String::from("Soda"),
+            address: String::from("20 Shalva Dadiani St"),
+        },
+        CoffeeHouse {
+            description: String::from("
+Blackcup
+
+Уютная спешелти кофейня в итальянском дворике, представители обжарщиков Нефть.
+Находится у метро Руставели во дворе справа от Макдональдса. Есть столики на улице и место для работы с розетками в тишине.
+
+Открыты 10:00-21:00
+✅альтернативный кофе: да
+❌не рекомендуем брать ноутбук, места мало
+
+Инстаграм: https://www.instagram.com/blackcup.ge/"),
+            photo: String::from("src/resources/blackcup.jpg"),
+            google_maps: String::from("https://g.page/Blackcup-ge"),
+            location_x: 41.703865,
+            location_y: 44.789518,
+            caffee_name: String::from("Blackcup"),
+            address: String::from("2/3 Mikheil Zandukeli Street, Shota Rustaveli Ave"),
         },
     ];
     kmk
