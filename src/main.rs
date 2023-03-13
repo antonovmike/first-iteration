@@ -50,11 +50,15 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
         ))
         .await?;
     } else {
-        api.execute(SendMessage::new(
-            chat_id.clone(),
-            "Привет! Чтобы найти ближайшую кофейню, пожалуйста, пришлите свою гео-локацию в чат.",
-        ))
-        .await?;
+    let send_location = KeyboardButton::new("Отправить гео локацию");
+    api.execute(
+        SendMessage::new(
+            chat_id.clone(), "Привет! Чтобы найти ближайшую кофейню, пожалуйста, пришлите свою гео-локацию в чат"
+        ).reply_markup(vec![vec![
+            KeyboardButton::request_location(send_location),
+        ]]),
+    )
+    .await?;
     };
     Ok(())
 }
