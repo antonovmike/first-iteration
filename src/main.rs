@@ -3,7 +3,7 @@ use std::ops::Not;
 
 use crate::catalog::CoffeeHouse;
 use carapax::methods::SendPhoto;
-use carapax::types::User;
+use carapax::types::{User, ReplyKeyboardMarkup};
 use carapax::types::{KeyboardButton, InlineKeyboardButton, InputFile, Message, MessageData, TextEntity};
 use carapax::{
     longpoll::LongPoll,
@@ -50,15 +50,17 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
         ))
         .await?;
     } else {
-    let send_location = KeyboardButton::new("Отправить гео локацию");
-    api.execute(
-        SendMessage::new(
-            chat_id.clone(), "Привет! Чтобы найти ближайшую кофейню, пожалуйста, пришлите свою гео-локацию в чат"
-        ).reply_markup(vec![vec![
-            KeyboardButton::request_location(send_location),
-        ]]),
-    )
-    .await?;
+        let send_location = KeyboardButton::request_location(KeyboardButton::new("Отправить гео локацию"));
+        let key_raw = ReplyKeyboardMarkup::row(
+            ReplyKeyboardMarkup::default(), vec![send_location]
+        );
+        let keyboard = ReplyKeyboardMarkup::resize_keyboard(key_raw, true);
+        let text = "Привет! Чтобы найти ближайшую кофейню, пожалуйста, пришлите свою гео-локацию в чат";
+        let sendmessage = SendMessage::new(chat_id, text);
+        let button_message = SendMessage::reply_markup(sendmessage.clone(), keyboard);
+        api.execute(
+            button_message
+        ).await?;
     };
     Ok(())
 }
