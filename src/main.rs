@@ -1,7 +1,14 @@
 #![allow(unused)]
+use std::env;
 use std::ops::Not;
 
 use tokio::test;
+
+use geo::point;
+use geo::prelude::*;
+
+use dotenv::dotenv;
+use serde::{Deserialize, Serialize};
 
 use carapax::methods::SendPhoto;
 use carapax::types::{
@@ -14,11 +21,6 @@ use carapax::{
     types::{ChatId, Text},
     Api, App, Context, ExecuteError, Ref,
 };
-use dotenv::dotenv;
-use geo::point;
-use geo::prelude::*;
-use serde::{Deserialize, Serialize};
-use std::env;
 
 use crate::database::CoffeeHouse;
 
@@ -38,6 +40,25 @@ pub enum Error {
 
     #[error("sql error: {0}")]
     SqlError(#[from] sqlite::Error),
+}
+
+#[tokio::main]
+async fn main() {
+    let spreadsheet_reader = table_to_db::to_base();
+    if spreadsheet_reader.is_err() {
+        println!("Table to db Error: {:?}", spreadsheet_reader);
+    }
+    dotenv().ok();
+    env_logger::init();
+
+    let token = env::var("CARAPAX_TOKEN").expect("CARAPAX_TOKEN is not set");
+    let api = Api::new(token).expect("Failed to create API");
+
+    let mut context = Context::default();
+    context.insert(api.clone());
+
+    let app = App::new(context, echo);
+    LongPoll::new(api, app).run().await
 }
 
 async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Error> {
@@ -82,25 +103,6 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Er
         api.execute(button_message).await?;
     };
     Ok(())
-}
-
-#[tokio::main]
-async fn main() {
-    let spreadsheet_reader = table_to_db::to_base();
-    if spreadsheet_reader.is_err() {
-        println!("Table to db Error: {:?}", spreadsheet_reader);
-    }
-    dotenv().ok();
-    env_logger::init();
-
-    let token = env::var("CARAPAX_TOKEN").expect("CARAPAX_TOKEN is not set");
-    let api = Api::new(token).expect("Failed to create API");
-
-    let mut context = Context::default();
-    context.insert(api.clone());
-
-    let app = App::new(context, echo);
-    LongPoll::new(api, app).run().await
 }
 
 fn distance(
