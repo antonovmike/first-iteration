@@ -17,4 +17,7 @@ pub enum Error {
 
     #[error("CARAPAX_TOKEN is not set: {0}")]
     EnvError(#[from] std::env::VarError),
+
+    #[error("failled to create API: {0}")]
+    ApiError(#[from] carapax::ApiError),
 }

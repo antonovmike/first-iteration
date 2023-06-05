@@ -39,7 +39,7 @@ async fn main() -> Result<(), Error> {
     env_logger::init();
 
     let token = env::var("CARAPAX_TOKEN")?;
-    let api = Api::new(token).expect("Failed to create API");
+    let api = Api::new(token)?;
 
     let mut context = Context::default();
     context.insert(api.clone());
