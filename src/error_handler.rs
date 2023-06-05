@@ -14,4 +14,7 @@ pub enum Error {
 
     #[error("sql error: {0}")]
     SqlError(#[from] sqlite::Error),
+
+    #[error("CARAPAX_TOKEN is not set: {0}")]
+    EnvError(#[from] std::env::VarError),
 }

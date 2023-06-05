@@ -30,7 +30,7 @@ mod error_handler;
 mod table_to_db;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Error> {
     let spreadsheet_reader = table_to_db::to_base();
     if spreadsheet_reader.is_err() {
         println!("Table to db Error: {:?}", spreadsheet_reader);
@@ -38,14 +38,16 @@ async fn main() {
     dotenv().ok();
     env_logger::init();
 
-    let token = env::var("CARAPAX_TOKEN").expect("CARAPAX_TOKEN is not set");
+    let token = env::var("CARAPAX_TOKEN")?;
     let api = Api::new(token).expect("Failed to create API");
 
     let mut context = Context::default();
     context.insert(api.clone());
 
     let app = App::new(context, echo);
-    LongPoll::new(api, app).run().await
+    LongPoll::new(api, app).run().await;
+
+    Ok(())
 }
 
 async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Error> {
