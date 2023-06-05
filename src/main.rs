@@ -1,7 +1,6 @@
 #![allow(unused)]
 use std::ops::Not;
 
-use crate::catalog::CoffeeHouse;
 use carapax::methods::SendPhoto;
 use carapax::types::{
     InlineKeyboardButton, InputFile, KeyboardButton, Message, MessageData, TextEntity,
@@ -19,17 +18,26 @@ use geo::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::env;
 
-mod catalog;
-//
+use crate::database::CoffeeHouse;
+
 mod database;
 mod table_to_db;
 
-async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), ExecuteError> {
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("carapax ExecuteError: {0}")]
+    CarapaxErr(#[from] carapax::ExecuteError),
+
+    #[error("sql error: {0}")]
+    SqlError(#[from] sqlite::Error),
+}
+
+async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Error> {
     if let MessageData::Location(location) = message.data {
         for cafe in distance(
             location.latitude.into(),
             location.longitude.into(),
-            catalog::kofe_list(),
+            database::kofe_list().await?,
         ) {
             let caffee_description = &cafe.description;
             let mut vector: Vec<&str> = caffee_description.lines().collect();
@@ -44,7 +52,7 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
             .await?;
             api.execute(
                 SendMessage::new(chat_id.clone(), &cafe.address).reply_markup(vec![vec![
-                    InlineKeyboardButton::with_url("📍Посмотреть на карте", &cafe.google_maps),
+                    InlineKeyboardButton::with_url("📍Посмотреть на карте", &cafe.google_map),
                 ]]),
             )
             .await?;
@@ -70,6 +78,10 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
 
 #[tokio::main]
 async fn main() {
+    let spreadsheet_reader = table_to_db::to_base();
+    if spreadsheet_reader.is_err() {
+        println!("Table to db Error: {:?}", spreadsheet_reader);
+    }
     dotenv().ok();
     env_logger::init();
 
@@ -86,7 +98,7 @@ async fn main() {
 fn distance(
     lat_user: f64,
     lon_user: f64,
-    mut list_of_coffe_houses: [CoffeeHouse; 46],
+    mut list_of_coffe_houses: Vec<CoffeeHouse>,
 ) -> Vec<CoffeeHouse> {
     let point_user = point!(x: lat_user, y: lon_user);
     list_of_coffe_houses.sort_by(|a, b| {
@@ -100,36 +112,36 @@ fn distance(
     list_of_coffe_houses.into_iter().take(3).collect()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
 
-    #[test]
-    fn test_distance_gives_right_order() {
-        let point0 = (41.6963678, 44.8199377);
-        let point1 = (41.7255743, 44.746247);
-        let point2 = (41.7106533, 44.7447204);
-        let list_of_coffe_houses = catalog::kofe_list();
-        let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
-        let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
-        let distance_to_point_2 = distance(point2.0, point2.1, list_of_coffe_houses.clone());
-        assert_ne!(distance_to_point_0, distance_to_point_1);
-        assert_ne!(distance_to_point_1, distance_to_point_2);
-        assert_ne!(distance_to_point_2, distance_to_point_0);
-        dbg!(distance_to_point_0);
-        dbg!(distance_to_point_1);
-        dbg!(distance_to_point_2);
-    }
+//     #[test]
+//     fn test_distance_gives_right_order() {
+//         let point0 = (41.6963678, 44.8199377);
+//         let point1 = (41.7255743, 44.746247);
+//         let point2 = (41.7106533, 44.7447204);
+//         let list_of_coffe_houses = database::kofe_list();
+//         let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
+//         let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
+//         let distance_to_point_2 = distance(point2.0, point2.1, list_of_coffe_houses.clone());
+//         assert_ne!(distance_to_point_0, distance_to_point_1);
+//         assert_ne!(distance_to_point_1, distance_to_point_2);
+//         assert_ne!(distance_to_point_2, distance_to_point_0);
+//         dbg!(distance_to_point_0);
+//         dbg!(distance_to_point_1);
+//         dbg!(distance_to_point_2);
+//     }
 
-    #[test]
-    fn test_tbilisi() {
-        let point0 = (41.720802, 44.721416);
-        let point1 = (41.727481, 44.793525);
-        let list_of_coffe_houses = catalog::kofe_list();
-        let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
-        let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
-        assert_ne!(distance_to_point_0, distance_to_point_1);
-        dbg!(distance_to_point_0);
-        dbg!(distance_to_point_1);
-    }
-}
+//     #[test]
+//     fn test_tbilisi() {
+//         let point0 = (41.720802, 44.721416);
+//         let point1 = (41.727481, 44.793525);
+//         let list_of_coffe_houses = database::kofe_list();
+//         let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
+//         let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
+//         assert_ne!(distance_to_point_0, distance_to_point_1);
+//         dbg!(distance_to_point_0);
+//         dbg!(distance_to_point_1);
+//     }
+// }

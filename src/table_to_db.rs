@@ -1,17 +1,6 @@
 use calamine::{open_workbook_auto, DataType, Reader};
 use thiserror::*;
 
-// #[derive(Debug, Clone, PartialEq)]
-// pub struct CoffeeHouse {
-//     pub description: String,
-//     pub photo: String,
-//     pub google_maps: String,
-//     pub location_x: f64,
-//     pub location_y: f64,
-//     pub caffee_name: String,
-//     pub address: String,
-// }
-
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("failed to open spreadsheet file: {0}")]
@@ -50,12 +39,12 @@ pub fn to_base() -> Result<(), Error> {
         let query = format!(
             "INSERT INTO coffee VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}');",
             desctiption,
-            caffee[1].to_string(),
-            caffee[2].to_string(),
-            caffee[3].to_string(),
-            caffee[4].to_string(),
-            caffee[5].to_string(),
-            caffee[6].to_string()
+            caffee[1].to_string(), // foto
+            caffee[2].to_string(), // google map
+            caffee[3].to_string(), // latitude
+            caffee[4].to_string(), // longitude
+            caffee[5].to_string(), // caffee name
+            caffee[6].to_string()  // address
         );
         connection.execute(&query)?;
     }

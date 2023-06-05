@@ -1,28 +1,28 @@
 use sqlite::{Error, State};
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Base {
+pub struct CoffeeHouse {
     pub description: String,
     pub photo: String,
-    pub google_maps: String,
+    pub google_map: String,
     pub location_x: f64,
     pub location_y: f64,
     pub caffee_name: String,
     pub address: String,
 }
 
-pub async fn base_data() -> Result<Vec<Base>, Error> {
+pub async fn kofe_list() -> Result<Vec<CoffeeHouse>, Error> {
     let connection = sqlite::open("db.sql")?;
-    let query = "SELECT * FROM museums";
+    let query = "SELECT * FROM coffee";
     let mut statement = connection.prepare(query)?;
 
-    let mut base_filds: Vec<Base> = vec![];
+    let mut base_filds: Vec<CoffeeHouse> = vec![];
 
     while let Ok(State::Row) = statement.next() {
-        let temp_sctruct = Base {
+        let temp_sctruct = CoffeeHouse {
             description: statement.read::<String, _>("description")?,
             photo: statement.read::<String, _>("photo")?,
-            google_maps: statement.read::<String, _>("google_maps")?,
+            google_map: statement.read::<String, _>("google_map")?,
             location_x: statement.read::<f64, _>("location_x")?,
             location_y: statement.read::<f64, _>("location_y")?,
             caffee_name: statement.read::<String, _>("caffee_name")?,
