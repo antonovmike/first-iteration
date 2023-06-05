@@ -30,6 +30,9 @@ pub enum Error {
     #[error("carapax ExecuteError: {0}")]
     CarapaxErr(#[from] carapax::ExecuteError),
 
+    #[error("carapax ExecuteError: {0}")]
+    VectorErr(#[from] std::num::TryFromIntError),
+
     #[error("sql error: {0}")]
     SqlError(#[from] sqlite::Error),
 }
@@ -43,7 +46,7 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Er
         ) {
             let caffee_description = &cafe.description;
             let mut vector: Vec<&str> = caffee_description.lines().collect();
-            let name_length: u32 = vector[1].len().try_into().unwrap();
+            let name_length: u32 = vector[1].len().try_into()?;
 
             api.execute(
                 SendPhoto::new(chat_id.clone(), InputFile::path(&cafe.photo).await.unwrap())
