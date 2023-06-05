@@ -23,24 +23,11 @@ use carapax::{
 };
 
 use crate::database::CoffeeHouse;
+use crate::error_handler::Error;
 
 mod database;
+mod error_handler;
 mod table_to_db;
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error("carapax ExecuteError: {0}")]
-    CarapaxErr(#[from] carapax::ExecuteError),
-
-    #[error("TryFromIntError: {0}")]
-    VectorErr(#[from] std::num::TryFromIntError),
-
-    #[error("InputFileErr: {0}")]
-    InputFileErr(#[from] std::io::Error),
-
-    #[error("sql error: {0}")]
-    SqlError(#[from] sqlite::Error),
-}
 
 #[tokio::main]
 async fn main() {

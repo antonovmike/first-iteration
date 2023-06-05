@@ -1,14 +1,7 @@
 use calamine::{open_workbook_auto, DataType, Reader};
 use thiserror::*;
 
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error("failed to open spreadsheet file: {0}")]
-    TableErr(#[from] calamine::Error),
-
-    #[error("sql error: {0}")]
-    SqlError(#[from] sqlite::Error),
-}
+use crate::error_handler::Error;
 
 pub fn to_base() -> Result<(), Error> {
     let path = "catalog.ods";
