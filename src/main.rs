@@ -64,8 +64,7 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Er
             api.execute(
                 SendPhoto::new(chat_id.clone(), InputFile::path(&cafe.photo).await?)
                     .caption(&cafe.description)
-                    .caption_entities(&[TextEntity::bold(0..(name_length + 1))])
-                    .expect("Failed to make caption bold."),
+                    .caption_entities(&[TextEntity::bold(0..(name_length + 1))])?,
             )
             .await?;
             api.execute(

@@ -20,4 +20,7 @@ pub enum Error {
 
     #[error("failled to create API: {0}")]
     ApiError(#[from] carapax::ApiError),
+
+    #[error("failled to make caption bold: {0}")]
+    CaptionError(#[from] carapax::types::TextEntityError),
 }
