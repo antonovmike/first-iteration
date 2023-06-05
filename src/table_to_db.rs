@@ -1,5 +1,4 @@
 use calamine::{open_workbook_auto, DataType, Reader};
-use thiserror::*;
 
 use crate::error_handler::Error;
 

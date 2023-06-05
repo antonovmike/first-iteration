@@ -1,26 +1,16 @@
-#![allow(unused)]
 use std::env;
-use std::ops::Not;
-
-use tokio::test;
 
 use geo::point;
 use geo::prelude::*;
 
 use dotenv::dotenv;
-use serde::{Deserialize, Serialize};
 
 use carapax::methods::SendPhoto;
+use carapax::types::ReplyKeyboardMarkup;
 use carapax::types::{
     InlineKeyboardButton, InputFile, KeyboardButton, Message, MessageData, TextEntity,
 };
-use carapax::types::{ReplyKeyboardMarkup, User};
-use carapax::{
-    longpoll::LongPoll,
-    methods::SendMessage,
-    types::{ChatId, Text},
-    Api, App, Context, ExecuteError, Ref,
-};
+use carapax::{longpoll::LongPoll, methods::SendMessage, types::ChatId, Api, App, Context, Ref};
 
 use crate::database::CoffeeHouse;
 use crate::error_handler::Error;
@@ -58,7 +48,7 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Er
             database::kofe_list().await?,
         ) {
             let caffee_description = &cafe.description;
-            let mut vector: Vec<&str> = caffee_description.lines().collect();
+            let vector: Vec<&str> = caffee_description.lines().collect();
             let name_length: u32 = vector[1].len().try_into()?;
 
             api.execute(
