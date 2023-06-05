@@ -7,7 +7,6 @@ pub fn to_base() -> Result<(), Error> {
     let path = "catalog.ods";
     let mut workbook = open_workbook_auto(path)?;
 
-    // Select the first worksheet
     let sheet_name = workbook.sheet_names()[0].to_owned();
     let range = workbook.worksheet_range(&sheet_name).unwrap();
 
@@ -21,9 +20,10 @@ pub fn to_base() -> Result<(), Error> {
     let query = "DROP TABLE IF EXISTS coffee";
     connection.execute(query)?;
     let query = "
-    CREATE TABLE IF NOT EXISTS coffee 
-    (description TEXT, photo TEXT, google_map TEXT, location_x f64, location_y f64, caffee_name TEXT, address TEXT);
-    ";
+    CREATE TABLE IF NOT EXISTS coffee (
+    description TEXT, photo TEXT, google_map TEXT, 
+    location_x f64, location_y f64, caffee_name TEXT, address TEXT
+    );";
     connection.execute(query)?;
 
     for caffee in table_content {
