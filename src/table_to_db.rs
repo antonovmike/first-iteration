@@ -32,12 +32,12 @@ pub fn to_base() -> Result<(), Error> {
         let query = format!(
             "INSERT INTO coffee VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}');",
             desctiption,
-            caffee[1].to_string(), // foto
-            caffee[2].to_string(), // google map
-            caffee[3].to_string(), // latitude
-            caffee[4].to_string(), // longitude
-            caffee[5].to_string(), // caffee name
-            caffee[6].to_string()  // address
+            caffee[1], // foto
+            caffee[2], // google map
+            caffee[3], // latitude
+            caffee[4], // longitude
+            caffee[5], // caffee name
+            caffee[6]  // address
         );
         connection.execute(&query)?;
     }
