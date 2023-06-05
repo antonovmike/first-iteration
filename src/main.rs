@@ -1,6 +1,8 @@
 #![allow(unused)]
 use std::ops::Not;
 
+use tokio::test;
+
 use carapax::methods::SendPhoto;
 use carapax::types::{
     InlineKeyboardButton, InputFile, KeyboardButton, Message, MessageData, TextEntity,
@@ -112,36 +114,38 @@ fn distance(
     list_of_coffe_houses.into_iter().take(3).collect()
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-//     #[test]
-//     fn test_distance_gives_right_order() {
-//         let point0 = (41.6963678, 44.8199377);
-//         let point1 = (41.7255743, 44.746247);
-//         let point2 = (41.7106533, 44.7447204);
-//         let list_of_coffe_houses = database::kofe_list();
-//         let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
-//         let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
-//         let distance_to_point_2 = distance(point2.0, point2.1, list_of_coffe_houses.clone());
-//         assert_ne!(distance_to_point_0, distance_to_point_1);
-//         assert_ne!(distance_to_point_1, distance_to_point_2);
-//         assert_ne!(distance_to_point_2, distance_to_point_0);
-//         dbg!(distance_to_point_0);
-//         dbg!(distance_to_point_1);
-//         dbg!(distance_to_point_2);
-//     }
+    #[tokio::test]
+    async fn test_distance_gives_right_order() -> Result<(), Error> {
+        let point0 = (41.6963678, 44.8199377);
+        let point1 = (41.7255743, 44.746247);
+        let point2 = (41.7106533, 44.7447204);
+        let list_of_coffe_houses = database::kofe_list().await?;
+        let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
+        let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
+        let distance_to_point_2 = distance(point2.0, point2.1, list_of_coffe_houses.clone());
+        assert_ne!(distance_to_point_0, distance_to_point_1);
+        assert_ne!(distance_to_point_1, distance_to_point_2);
+        assert_ne!(distance_to_point_2, distance_to_point_0);
+        dbg!(distance_to_point_0);
+        dbg!(distance_to_point_1);
+        dbg!(distance_to_point_2);
+        Ok(())
+    }
 
-//     #[test]
-//     fn test_tbilisi() {
-//         let point0 = (41.720802, 44.721416);
-//         let point1 = (41.727481, 44.793525);
-//         let list_of_coffe_houses = database::kofe_list();
-//         let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
-//         let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
-//         assert_ne!(distance_to_point_0, distance_to_point_1);
-//         dbg!(distance_to_point_0);
-//         dbg!(distance_to_point_1);
-//     }
-// }
+    #[tokio::test]
+    async fn test_tbilisi() -> Result<(), Error> {
+        let point0 = (41.720802, 44.721416);
+        let point1 = (41.727481, 44.793525);
+        let list_of_coffe_houses = database::kofe_list().await?;
+        let distance_to_point_0 = distance(point0.0, point0.1, list_of_coffe_houses.clone());
+        let distance_to_point_1 = distance(point1.0, point1.1, list_of_coffe_houses.clone());
+        assert_ne!(distance_to_point_0, distance_to_point_1);
+        dbg!(distance_to_point_0);
+        dbg!(distance_to_point_1);
+        Ok(())
+    }
+}
