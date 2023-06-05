@@ -3,8 +3,10 @@ use std::ops::Not;
 
 use crate::catalog::CoffeeHouse;
 use carapax::methods::SendPhoto;
-use carapax::types::{User, ReplyKeyboardMarkup};
-use carapax::types::{KeyboardButton, InlineKeyboardButton, InputFile, Message, MessageData, TextEntity};
+use carapax::types::{
+    InlineKeyboardButton, InputFile, KeyboardButton, Message, MessageData, TextEntity,
+};
+use carapax::types::{ReplyKeyboardMarkup, User};
 use carapax::{
     longpoll::LongPoll,
     methods::SendMessage,
@@ -18,6 +20,9 @@ use serde::{Deserialize, Serialize};
 use std::env;
 
 mod catalog;
+//
+mod database;
+mod table_to_db;
 
 async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), ExecuteError> {
     if let MessageData::Location(location) = message.data {
@@ -26,10 +31,10 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
             location.longitude.into(),
             catalog::kofe_list(),
         ) {
-			let caffee_description = &cafe.description;
-			let mut vector: Vec<&str> = caffee_description.lines().collect();
-			let name_length: u32 = vector[1].len().try_into().unwrap();
-			
+            let caffee_description = &cafe.description;
+            let mut vector: Vec<&str> = caffee_description.lines().collect();
+            let name_length: u32 = vector[1].len().try_into().unwrap();
+
             api.execute(
                 SendPhoto::new(chat_id.clone(), InputFile::path(&cafe.photo).await.unwrap())
                     .caption(&cafe.description)
@@ -39,7 +44,7 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
             .await?;
             api.execute(
                 SendMessage::new(chat_id.clone(), &cafe.address).reply_markup(vec![vec![
-                    InlineKeyboardButton::with_url("📍Посмотреть на карте",  &cafe.google_maps),
+                    InlineKeyboardButton::with_url("📍Посмотреть на карте", &cafe.google_maps),
                 ]]),
             )
             .await?;
@@ -50,17 +55,15 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Ex
         ))
         .await?;
     } else {
-        let send_location = KeyboardButton::request_location(KeyboardButton::new("Отправить гео локацию"));
-        let key_raw = ReplyKeyboardMarkup::row(
-            ReplyKeyboardMarkup::default(), vec![send_location]
-        );
+        let send_location =
+            KeyboardButton::request_location(KeyboardButton::new("Отправить гео локацию"));
+        let key_raw = ReplyKeyboardMarkup::row(ReplyKeyboardMarkup::default(), vec![send_location]);
         let keyboard = ReplyKeyboardMarkup::resize_keyboard(key_raw, true);
-        let text = "Привет! Чтобы найти ближайшую кофейню, пожалуйста, пришлите свою гео-локацию в чат";
+        let text =
+            "Привет! Чтобы найти ближайшую кофейню, пожалуйста, пришлите свою гео-локацию в чат";
         let sendmessage = SendMessage::new(chat_id, text);
         let button_message = SendMessage::reply_markup(sendmessage.clone(), keyboard);
-        api.execute(
-            button_message
-        ).await?;
+        api.execute(button_message).await?;
     };
     Ok(())
 }
