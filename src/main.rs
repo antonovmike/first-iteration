@@ -30,8 +30,11 @@ pub enum Error {
     #[error("carapax ExecuteError: {0}")]
     CarapaxErr(#[from] carapax::ExecuteError),
 
-    #[error("carapax ExecuteError: {0}")]
+    #[error("TryFromIntError: {0}")]
     VectorErr(#[from] std::num::TryFromIntError),
+
+    #[error("TryFromIntError: {0}")]
+    InputFileErr(#[from] std::io::Error),
 
     #[error("sql error: {0}")]
     SqlError(#[from] sqlite::Error),
@@ -49,7 +52,7 @@ async fn echo(api: Ref<Api>, chat_id: ChatId, message: Message) -> Result<(), Er
             let name_length: u32 = vector[1].len().try_into()?;
 
             api.execute(
-                SendPhoto::new(chat_id.clone(), InputFile::path(&cafe.photo).await.unwrap())
+                SendPhoto::new(chat_id.clone(), InputFile::path(&cafe.photo).await?)
                     .caption(&cafe.description)
                     .caption_entities(&[TextEntity::bold(0..(name_length + 1))])
                     .expect("Failed to make caption bold."),
