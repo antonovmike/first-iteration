@@ -35,7 +35,7 @@ pub enum Error {
     #[error("TryFromIntError: {0}")]
     VectorErr(#[from] std::num::TryFromIntError),
 
-    #[error("TryFromIntError: {0}")]
+    #[error("InputFileErr: {0}")]
     InputFileErr(#[from] std::io::Error),
 
     #[error("sql error: {0}")]
